@@ -91,19 +91,31 @@ mean_filter = np.array([[1/9, 1/9, 1/9],
                         [1/9, 1/9, 1/9],
                         [1/9, 1/9, 1/9]])
 
+# 1.原始影像使用mean filter模糊化後使用2階laplacian mask (找邊緣)
 img = cv2.imread("lena_black.jpg", cv2.IMREAD_GRAYSCALE).astype(np.int32)
 mean_img = CNN(img, mean_filter)
 laplacian_img = CNN(mean_img, laplacian_mask_2d)
 cv2.imwrite("step1.jpg", laplacian_img)
+
+# 2.將(1)圖片與原始影像相加
 step_2_img = img+laplacian_img
 cv2.imwrite("step2.jpg", step_2_img)
+
+# 3.對原始影像使用sobel filter
 sobel_horionoatal = CNN(img, sobel_mask_horizontal).astype(np.int32)
 sobel_vertical = CNN(img, sobel_mask_vertical).astype(np.int32)
 gradient_magnitude = np.sqrt(sobel_horionoatal ** 2 + sobel_vertical ** 2)
 gradient_magnitude = np.clip(gradient_magnitude, 0, 255)
 cv2.imwrite("step3.jpg", gradient_magnitude)
+
+# 4.對(3)圖片做mean filter 
 mean_img = CNN(gradient_magnitude, mean_filter)
 cv2.imwrite("step4.jpg", mean_img)
+
+# 5-1.將(4)圖片做normalize並乘上(2)圖片 
+# 5-2.將(4)圖片做normalize並乘上(1)圖片 
+# 6-1.將(5-1)加上原始影像 
+# 6-2.將(5-2)加上原始影像 
 
 # 課本做法
 normalize_val = normalize(mean_img)
