@@ -134,7 +134,7 @@ noise_img = add_impulse_noise(img, 1/3, 1/4)
 cv2.imwrite("noise_lena_black_with_CSE.png", noise_img)
 # noise_img = cv2.imread("noise_lena_black_with_CSE.jpg", cv2.IMREAD_GRAYSCALE)
 median_filter_img = median_filter(noise_img, 3)
-cv2.imwrite("median_filter_noise_lena_black_with_CSE.jpg", median_filter_img)
+cv2.imwrite("median_filter_noise_lena_black_with_CSE.png", median_filter_img)
 adaptive_median_filter_img = adaptive_median_filter(noise_img)
 cv2.imwrite("adaptive_median_filter_noise_lena_black_with_CSE.png", adaptive_median_filter_img)
 
