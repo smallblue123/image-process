@@ -71,12 +71,12 @@
 
 | Step | 說明                 | 輸出檔案        | 圖片預覽                                     |
 | ---- | ------------------ | ----------- | ---------------------------------------- |
-| 1    | 原圖經 mean filter 平滑 | `step1.jpg` | ![step1](./Image%20Sharpening/step1.jpg) |
-| 2    | Laplacian 邊緣偵測     | `step2.jpg` | ![step2](./Image%20Sharpening/step2.jpg) |
-| 3    | Sobel 梯度幅值圖        | `step3.jpg` | ![step3](./Image%20Sharpening/step3.jpg) |
-| 4    | 平滑梯度圖              | `step4.jpg` | ![step4](./Image%20Sharpening/step4.jpg) |
-| 5    | 正規化 × Laplacian    | `step5.jpg` | ![step5](./Image%20Sharpening/step5.jpg) |
-| 6    | 加回原圖後的銳化結果         | `step6.jpg` | ![step6](./Image%20Sharpening/step6.jpg) |
+| 1    | 原圖經 mean filter 平滑 | `step1.jpg` | ![step1](./step1.jpg) |
+| 2    | Laplacian 邊緣偵測     | `step2.jpg` | ![step2](./step2.jpg) |
+| 3    | Sobel 梯度幅值圖        | `step3.jpg` | ![step3](./step3.jpg) |
+| 4    | 平滑梯度圖              | `step4.jpg` | ![step4](./step4.jpg) |
+| 5    | 正規化 × Laplacian    | `step5.jpg` | ![step5](./step5.jpg) |
+| 6    | 加回原圖後的銳化結果         | `step6.jpg` | ![step6](./step6.jpg) |
 
 
 ---
