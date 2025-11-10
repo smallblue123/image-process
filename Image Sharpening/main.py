@@ -1,7 +1,7 @@
 import random
 import cv2
 import numpy as np
-
+import os
 
 def CNN(image, mask, threshold=0):
     M, N = image.shape[:2]
@@ -65,9 +65,9 @@ def set_n_mean_filter(n):
 
 
 def normalize(img):
-    min = np.min(img)
-    max = np.max(img)
-    normalize_img = img / (max-min)
+    min_num = np.min(img)
+    max_num = np.max(img)
+    normalize_img = (img-min_num) / (max_num-min_num)
     return normalize_img
 
 
@@ -91,6 +91,8 @@ mean_filter = np.array([[1/9, 1/9, 1/9],
                         [1/9, 1/9, 1/9],
                         [1/9, 1/9, 1/9]])
 
+# 自動切換到 main.py 所在目錄
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # 1.原始影像使用mean filter模糊化後使用2階laplacian mask (找邊緣)
 img = cv2.imread("lena_black.jpg", cv2.IMREAD_GRAYSCALE).astype(np.int32)
 mean_img = CNN(img, mean_filter)
@@ -112,23 +114,13 @@ cv2.imwrite("step3.jpg", gradient_magnitude)
 mean_img = CNN(gradient_magnitude, mean_filter)
 cv2.imwrite("step4.jpg", mean_img)
 
-# 5-1.將(4)圖片做normalize並乘上(2)圖片 
-# 5-2.將(4)圖片做normalize並乘上(1)圖片 
-# 6-1.將(5-1)加上原始影像 
-# 6-2.將(5-2)加上原始影像 
 
-# 課本做法
-normalize_val = normalize(mean_img)
-normalize_img = normalize_val * step_2_img
-cv2.imwrite("step5_1.jpg", normalize_img)
-final_img = normalize_img + img
-cv2.imwrite("step6_1.jpg", final_img)
-
-
-# 老師作法
+# 5.將(4)圖片做normalize並乘上(1)圖片 
 normalize_val = normalize(mean_img)
 normalize_img = normalize_val * laplacian_img
-cv2.imwrite("step5_2.jpg", normalize_img)
+cv2.imwrite("step5.jpg", normalize_img)
+
+# 6.將(5-2)加上原始影像 
 final_img = normalize_img + img
-cv2.imwrite("step6_2.jpg", final_img)
+cv2.imwrite("step6.jpg", final_img)
 

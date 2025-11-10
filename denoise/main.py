@@ -1,7 +1,7 @@
 import random
 import cv2
 import numpy as np
-
+import os
 
 def add_impulse_noise(img, black_rate, white_rate):
     M, N = img.shape
@@ -122,7 +122,8 @@ def PSNR(img1, img2):
     psnr = 10 * np.log10((max_pixel**2) / mse)
     return psnr
 
-
+# 自動切換到 main.py 所在目錄
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 img = cv2.imread("lena_black_with_CSE.png", cv2.IMREAD_GRAYSCALE)
 # median_filter_img = median_filter(img, 3)
 # cv2.imwrite("median_filter_lena_black.jpg", median_filter_img)
