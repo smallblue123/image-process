@@ -1,57 +1,98 @@
 # Edge Detection — 形態學邊緣偵測與填補示例
 
-本資料夾示範如何以 **形態學運算 (Mathematical Morphology)** 進行影像的邊緣偵測與區域填補。  
-透過 **Erosion（侵蝕）** 與 **Dilation（擴張）** 兩項基本操作，並以範例影像 `test.png` 展示「邊界擷取」與「區域填補」的完整流程。
+本資料夾示範如何以 **形態學運算 (Mathematical Morphology)** 進行影像處理。  
+程式碼 `main.py` 透過實作 **Erosion（侵蝕）** 與 **Dilation（擴張）** 兩項基本操作，進一步實現「**邊界擷取**」、「**Opening**」、「**Closing**」以及「**區域填補**」等多種應用。  
+
+範例影像使用 **`test.png`** 進行處理。形態學操作皆以 **20 次**迭代為基準。
 
 ---
 
-## 形態學基礎
+## 形態學基礎操作與複合運算
+
+形態學操作基於**結構元素 (Structuring Element, SE)** 在二值影像上進行運算。
 
 ### 1) Erosion（侵蝕）
 
-* **概念**：用結構元素（Structuring Element, SE）在影像上滑動，若 SE 覆蓋範圍內的像素無法完全「落在」前景，中心像素就被移除（變成 0）。
-* **效果**：前景收縮、孔洞變大、細小雜點被消除；邊界會向內縮。
-* **用途**：去除小顆粒雜訊、分離相連物件（搭配閾值化結果）。
+* **概念**：SE 完全覆蓋的前景區域才保留，否則中心像素變為背景（0）。
+* **效果**：前景收縮、孔洞變大；邊界向內縮。
+* **結果檔案**：`erosion.png` (經過 **20 次**迭代)。
 
 ### 2) Dilation（擴張）
 
-* **概念**：用 SE 在影像上滑動，若 SE 與前景有重疊，中心像素就被加入（變成 1）。
-* **效果**：前景膨脹、細縫被填補、邊界向外擴張。
-* **用途**：連接破碎邊緣、填補狹窄間隙或小孔洞。
+* **概念**：只要 SE 與前景有任一像素重疊，中心像素就變為前景（1）。
+* **效果**：前景膨脹、細縫被填補；邊界向外擴張。
+* **結果檔案**：`dilation.png` (經過 **20 次**迭代)。
 
-> **Erosion 與 Dilation 的組合**能構成多種經典操作（Opening/Closing、Gradient、Boundary Extraction、Hole Filling…），本範例重點展示「邊界擷取」與「填補」。
+### 3) Opening（開運算）
+
+* **定義**：先侵蝕 (Erosion) 再擴張 (Dilation)：$\mathrm{Open}(A) = \mathrm{Dilate}(\mathrm{Erode}(A))$。
+* **效果**：平滑輪廓、去除前景中的尖銳突起（橋接）。
+* **結果檔案**：`open.png` (Erosion 與 Dilation 皆經過 **20 次**迭代)。
+
+### 4) Closing（閉運算）
+
+* **定義**：先擴張 (Dilation) 再侵蝕 (Erosion)：$\mathrm{Close}(A) = \mathrm{Erode}(\mathrm{Dilate}(A))$。
+* **效果**：平滑輪廓、填補小的孔洞或狹窄的斷裂處。
+* **結果檔案**：`close.png` (Dilation 與 Erosion 皆經過 **20 次**迭代)。
 
 ---
 
-## 邊界擷取 (Boundary Extraction) 範例
+## 視覺化比較圖 (20 次迭代)
 
-邏輯上可用：
+下圖展示了原始影像 (`test.png`) 與經過 **20 次**形態學操作後的結果比較：
 
-* 二值影像 `A` 的邊界 ≈ `A - Erode(A)`（或 `Dilate(A) - A` 亦可視情況使用）
+| 原始影像 (`test.png`) | Erosion (`erosion.png`) | Dilation (`dilation.png`) |
+| :---: | :---: | :---: |
+| ![Original Image](./test.png) | ![Erosion 20 Times](./erosion.png) | ![Dilation 20 Times](./dilation.png) |
 
-下圖為本資料夾中的範例結果（`extract.png`），展示侵蝕後做差分所取得的邊界：
+| 原始影像 (`test.png`) | Opening (`open.png`) | Closing (`close.png`) |
+| :---: | :---: | :---: |
+| ![Original Image](./test.png) | ![Opening 20 Times](./open.png) | ![Closing 20 Times](./close.png) |
+
+#### 先 Opening 再 Closing 複合運算 (`open after close.png`)
+此操作能夠有效平滑物體輪廓，去除小突起和填補小孔洞，同時保留物件的整體形狀。
+![Open After Close](./open after close.png)
+
+---
+
+## 應用範例
+
+### 1) 邊界擷取 (Boundary Extraction)
+
+* **邏輯**：使用原始影像減去其侵蝕後的結果。
+$$
+\text{Boundary}(A) = A - \mathrm{Erode}(A)
+$$
+* **結果檔案**：`extract.png`
+
+下圖為本資料夾中的範例結果 (`extract.png`)，展示侵蝕後做差分所取得的邊界：
 
 ![Boundary Extraction Example](./extract.png)
 ---
 
-## 區域填補 (Region Filling) 範例
+### 2) 區域填補 (Region Filling)
 
-典型流程（基於 seed 的區域成長 + 形態學約束）：
+* **目標**：填滿二值影像中由前景邊界包圍的背景區域（孔洞）。
+* **流程**：從孔洞內的一個種子點 $X_0$ 開始，迭代擴張，但受限於反向遮罩 $\lnot A$（即只在背景區域內擴散）。
+$$
+X_{k+1} = (\mathrm{Dilate}(X_k) \land \lnot A)
+$$
+直到 $X_{k+1} = X_k$ 收斂。最終填補結果為 $A \lor X$。
+* **結果檔案**：`filling_results/filling.png` (及迭代過程圖片)
 
-1. 準備種子點 **X₀**（位於要填補的洞內）。  
-
-2. 反向遮罩 **~A**（只允許在背景內擴散）。  
-
-3. 迭代過程如下：
-$X_{k+1} = (\mathrm{Dilate}(X_k) \land \lnot A)$
-直到收斂。  
-
-4. 最終將 **X** 與 **A** 合成得到填補結果。
-
-
-下方為動畫示例（`filling_animation.gif`），可視覺化看到種子區域如何逐步擴張直至收斂：
+下方為動畫示例 (`filling_animation.gif`)，可視覺化看到種子區域如何逐步擴張直至收斂：
 
 ![Filling Animation](./filling_animation.gif)
 ---
 
-##
+## 程式輸出檔案
+
+運行 `main.py` 後，將在當前目錄產生以下結果圖檔：
+
+* `dilation.png`: 原始影像經過 **20 次** Dilation 的結果。
+* `erosion.png`: 原始影像經過 **20 次** Erosion 的結果。
+* `extract.png`: 邊界擷取結果 ($A - \mathrm{Erode}(A)$)。
+* `open.png`: 原始影像經過 Opening 運算的結果 (Erosion 與 Dilation 皆經過 **20 次**)。
+* `close.png`: 原始影像經過 Closing 運算的結果 (Dilation 與 Erosion 皆經過 **20 次**)。
+* `open after close.png`: 先 Opening 再 Closing 的複合運算結果。
+* `filling_results/`: 區域填補的過程圖片 (需解除 `main.py` 中 `filling` 函數的註釋)。
