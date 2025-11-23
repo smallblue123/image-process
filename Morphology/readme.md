@@ -49,9 +49,9 @@
 | :---: | :---: | :---: |
 | ![Original Image](./test.png) | ![Opening 20 Times](./open.png) | ![Closing 20 Times](./close.png) |
 
-#### 先 Opening 再 Closing 複合運算 (`open after close.png`)
+#### 先 Opening 再 Closing 複合運算 (`open_after_close.png`)
 此操作能夠有效平滑物體輪廓，去除小突起和填補小孔洞，同時保留物件的整體形狀。
-![Open After Close](./open after close.png)
+![Open After Close](./open_after_close.png)
 
 ---
 
@@ -92,6 +92,6 @@ $X_{k+1} = (\mathrm{Dilate}(X_k) \land \lnot A)$
 * `extract.png`: 邊界擷取結果 ($A - \mathrm{Erode}(A)$)。
 * `open.png`: 原始影像經過 Opening 運算的結果 (Erosion 與 Dilation 皆經過 **20 次**)。
 * `close.png`: 原始影像經過 Closing 運算的結果 (Dilation 與 Erosion 皆經過 **20 次**)。
-* `open after close.png`: 先 Opening 再 Closing 的複合運算結果。
+* `open_after_close.png`: 先 Opening 再 Closing 的複合運算結果。
 * `filling_results/`: 區域填補的過程圖片 (需解除 `main.py` 中 `filling` 函數的註釋)。
 
