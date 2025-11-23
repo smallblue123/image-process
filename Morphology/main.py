@@ -55,6 +55,7 @@ def set_filling_mask(n):
     return np.ones((n,n))
 
 
+
 def filling(img):
     filling_mask = np.array([[0, 1, 0],
                              [1, 1, 1],
