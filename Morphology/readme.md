@@ -24,14 +24,14 @@
 * **結果檔案**：`dilation.png` (經過 **20 次**迭代)。
 
 ### 3) Opening（開運算）
-
-* **定義**：先侵蝕 (Erosion) 再擴張 (Dilation)：$\mathrm{Open}(A) = \mathrm{Dilate}(\mathrm{Erode}(A))$。
+    
+* **定義**：先侵蝕 (Erosion) 再擴張 (Dilation)：`Open(A) = Dilate(Erode(A))`
 * **效果**：平滑輪廓、去除前景中的尖銳突起（橋接）。
 * **結果檔案**：`open.png` (Erosion 與 Dilation 皆經過 **20 次**迭代)。
 
 ### 4) Closing（閉運算）
 
-* **定義**：先擴張 (Dilation) 再侵蝕 (Erosion)：$\mathrm{Close}(A) = \mathrm{Erode}(\mathrm{Dilate}(A))$。
+* **定義**：先擴張 (Dilation) 再侵蝕 (Erosion)：`Close(A) = Erode(Dilate(A))`。
 * **效果**：平滑輪廓、填補小的孔洞或狹窄的斷裂處。
 * **結果檔案**：`close.png` (Dilation 與 Erosion 皆經過 **20 次**迭代)。
 
@@ -60,9 +60,9 @@
 ### 1) 邊界擷取 (Boundary Extraction)
 
 * **邏輯**：使用原始影像減去其侵蝕後的結果。
-$$
-\text{Boundary}(A) = A - \mathrm{Erode}(A)
-$$
+
+    $\text{Boundary}(A) = A - \mathrm{Erode}(A)$
+  
 * **結果檔案**：`extract.png`
 
 下圖為本資料夾中的範例結果 (`extract.png`)，展示侵蝕後做差分所取得的邊界：
@@ -74,9 +74,7 @@ $$
 
 * **目標**：填滿二值影像中由前景邊界包圍的背景區域（孔洞）。
 * **流程**：從孔洞內的一個種子點 $X_0$ 開始，迭代擴張，但受限於反向遮罩 $\lnot A$（即只在背景區域內擴散）。
-$$
-X_{k+1} = (\mathrm{Dilate}(X_k) \land \lnot A)
-$$
+$X_{k+1} = (\mathrm{Dilate}(X_k) \land \lnot A)$
 直到 $X_{k+1} = X_k$ 收斂。最終填補結果為 $A \lor X$。
 * **結果檔案**：`filling_results/filling.png` (及迭代過程圖片)
 
@@ -96,3 +94,4 @@ $$
 * `close.png`: 原始影像經過 Closing 運算的結果 (Dilation 與 Erosion 皆經過 **20 次**)。
 * `open after close.png`: 先 Opening 再 Closing 的複合運算結果。
 * `filling_results/`: 區域填補的過程圖片 (需解除 `main.py` 中 `filling` 函數的註釋)。
+
