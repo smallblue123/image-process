@@ -89,7 +89,7 @@ $X_{k+1} = (\mathrm{Dilate}(X_k) \land \lnot A)$
 
 * `dilation.png`: 原始影像經過 **20 次** Dilation 的結果。
 * `erosion.png`: 原始影像經過 **20 次** Erosion 的結果。
-* `extract.png`: 邊界擷取結果 ($A - \mathrm{Erode}(A)$)。
+* `extract.png`: 邊界擷取結果。
 * `open.png`: 原始影像經過 Opening 運算的結果 (Erosion 與 Dilation 皆經過 **20 次**)。
 * `close.png`: 原始影像經過 Closing 運算的結果 (Dilation 與 Erosion 皆經過 **20 次**)。
 * `open_after_close.png`: 先 Opening 再 Closing 的複合運算結果。
