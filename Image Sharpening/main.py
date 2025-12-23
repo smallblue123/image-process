@@ -107,7 +107,7 @@ cv2.imwrite("step2.jpg", step_2_img)
 sobel_horionoatal = CNN(img, sobel_mask_horizontal).astype(np.int32)
 sobel_vertical = CNN(img, sobel_mask_vertical).astype(np.int32)
 gradient_magnitude = np.sqrt(sobel_horionoatal ** 2 + sobel_vertical ** 2)
-gradient_magnitude = np.clip(gradient_magnitude, 0, 255)
+gradient_magnitude = gradient_magnitude/np.max(gradient_magnitude) * 255
 cv2.imwrite("step3.jpg", gradient_magnitude)
 
 # 4.對(3)圖片做mean filter 

@@ -57,7 +57,7 @@ class SplicePic:
 
         return final_pic.astype(np.uint8)
 
-    def compute_affine_transform_matrix(self, src_points, dst_points):
+    def compute_homography_matrix(self, src_points, dst_points):
         # 係數矩陣 A 和結果向量 b
         A = np.zeros((8, 8))
         b = np.zeros((8, 1))
@@ -137,7 +137,7 @@ class SplicePic:
         for turn in range(Iter_num):
             sample = random.sample(range(num_samples), sub_samples)
             Iner_num = 0
-            H = self.compute_affine_transform_matrix(source_poses[sample], dest_poses[sample])
+            H = self.compute_homography_matrix(source_poses[sample], dest_poses[sample])
             for i in range(num_samples):
                 if i not in sample:
                     source_pos = np.hstack((source_poses[i], 1))
@@ -320,9 +320,9 @@ class Display():
         match_poses = copy.copy(match_pos)
         for pos1, pos2 in match_poses:
             pos2[0] += img1_col
-            cv2.circle(new_pic, pos1, 2, (0, 0, 255), 1)
-            cv2.circle(new_pic, pos2, 2, (0, 0, 255), 1)
-            cv2.line(new_pic, pos1, pos2, (0, 255, 0), 1)
+            cv2.circle(new_pic, pos1, 2, (0, 0, 255), -1)
+            cv2.circle(new_pic, pos2, 2, (0, 0, 255), -1)
+            cv2.line(new_pic, pos1, pos2, (0, 255, 0), 2)
 
         # cv2.imshow('Matched Image', new_pic)
         cv2.imwrite(f'{pic_name}.png', new_pic)
