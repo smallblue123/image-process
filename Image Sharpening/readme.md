@@ -3,16 +3,16 @@
 本專案為 `image-process` 系列中的「影像銳化」。
 目標是使用 **純 Python + NumPy** 手寫卷積運算（Convolution），實現類似 **Unsharp Masking** 的高階銳化流程。
 
-透過本專案，你可以清楚看到「傳統 Laplacian 銳化」與「基於梯度遮罩（Gradient-Masked）銳化」的差異與數學原理。
+透過本專案，你可以清楚看到「傳統 Laplacian 銳化」與「梯度遮罩銳化」的差異與數學原理。
 
 ---
 
 ## 專案特色
 
-* **全手刻核心演算法**：不依賴 OpenCV 的 `filter2D` 或 `copyMakeBorder`，完全手寫 `CNN()` 卷積函式與 `add_border()` 鏡像填充。
+* **全手刻核心演算法**：不依賴 OpenCV 的 `filter2D` 或 `copyMakeBorder`，完全手寫卷積函式與 `add_border()` 鏡像填充。
 * **兩種做法比較**：
     * **作法 A (Step 1-2)**：傳統銳化，直接疊加邊緣，容易放大雜訊。
-    * **作法 B (Step 3-6)**：改良版銳化，引入 Sobel 梯度作為遮罩，只在強邊緣處銳化。
+    * **作法 B (Step 3-6)**：改良版銳化，加入 Sobel 梯度作為遮罩，只在強邊緣處銳化。
 * **完整流程輸出**：程式輸出 `step1.jpg`～`step6.jpg`，將數學公式視覺化。
 
 ---
@@ -51,7 +51,7 @@
 
 ## 為什麼這樣做？
 
-* **手寫 `CNN` 與 `add_border`**：理解卷積神經網路最底層的滑動視窗（Sliding Window）與邊界處理（Padding）機制。
+* **手寫 `卷基` 與 `add_border`**：理解卷積神經網路最底層的滑動視窗（Sliding Window）與邊界處理（Padding）機制。
 * **Sobel vs Laplacian**：Laplacian 對雜訊極度敏感；Sobel 雖然模糊但能有效指出「哪裡是邊緣」。本演算法結合兩者優點：用 Sobel 告訴我們「在哪裡銳化」，用 Laplacian 告訴我們「銳化多少」。
 * **正規化 (Normalization)**：將數值控制在 [0, 1] 之間作為權重，避免像素值溢出。
 
