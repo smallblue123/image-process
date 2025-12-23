@@ -228,31 +228,28 @@ def get_otsu_threshold(image):
 # main
 # 1. 讀取測試圖片
 img = cv2.imread('lena_black.jpg', cv2.IMREAD_GRAYSCALE)
-noise = np.random.normal(0, 10, img.shape) # 加入雜訊
-img_noisy = img
-cv2.imwrite('1_canny_noisy_input.jpg', img_noisy)  # 儲存加入雜訊的輸入影像以供檢視
+cv2.imwrite('1_canny_noisy_input.jpg', img)
 
 # 2. 執行 Canny
 # Step 1: 高斯模糊
 kernel = gaussian_kernel(size=5, sigma=1.4)
-img_smoothed = cv2.filter2D(img_noisy, -1, kernel)
-cv2.imwrite('2_canny_gaussian_kernel.jpg', img_smoothed)  # 儲存高斯模糊影像以供檢視
+img_smoothed = cv2.filter2D(img, -1, kernel)
+cv2.imwrite('2_canny_gaussian_kernel.jpg', img_smoothed)  # 儲存高斯模糊影像
 
 # Step 2: 算Sobel 梯度
 img_gradient, theta = sobel_filters(img_smoothed)
-cv2.imwrite('3_canny_sobel_gradient.jpg', img_gradient)  # 儲存梯度影像以供檢視
+cv2.imwrite('3_canny_sobel_gradient.jpg', img_gradient)  # 儲存梯度影像
 
 
 # Step 3: NMS (細化邊緣)
 img_nms = non_max_suppression(img_gradient, theta)
-cv2.imwrite('4_canny_nms.jpg', img_nms)  # 儲存 NMS 影像以供檢視
+cv2.imwrite('4_canny_nms.jpg', img_nms)  # 儲存 NMS 影像
 
 # Step 4: 雙閾值
 # 用OTSU算前景背景閾值
 img_thresh, weak, strong = double_threshold(img_nms)
-cv2.imwrite('5_canny_threshold.jpg', img_thresh)  # 儲存雙閾值影像以供檢視
+cv2.imwrite('5_canny_threshold.jpg', img_thresh)  # 儲存雙閾值影像
 
 # Step 5: 連接弱邊緣
 img_final = edge_linking(img_thresh, weak, strong)
-cv2.imwrite('6_canny_final.jpg', img_final)  # 儲存最終 Canny 邊緣影像以供檢視
-
+cv2.imwrite('6_canny_final.jpg', img_final)  # 儲存最終 Canny 邊緣影像
